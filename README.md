@@ -2,6 +2,8 @@
 ## Intro
 This library contains several tools for graphically representing data such as that retrieved from an IMU enabled microcontroller project.  I've found, when dealing with accelerometers and gyroscopes and such, that it can be very handy to have some realtime display of the the raw data in conjunction with processed data such as filtered or compensated data.  This library is intended to provide such realtime displays in Processing for data delivered over a USB serial stream.
 
+![alt text](https://github.com/jacrabb/IMUDataVis.Processing/raw/master/docs/screen1.png "IMU Data Visualizations")
+
 This library is distributed under the GNU General Public License.
 ## Overview
 ### Installing
