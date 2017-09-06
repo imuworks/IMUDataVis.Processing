@@ -1,16 +1,13 @@
 # IMUDataVis.Processing
----
-#Intro
+## Intro
 This library contains several tools for graphically representing data such as that retrieved from an IMU enabled microcontroller project.  I've found, when dealing with accelerometers and gyroscopes and such, that it can be very handy to have some realtime display of the the raw data in conjunction with processed data such as filtered or compensated data.  This library is intended to provide such realtime displays in Processing for data delivered over a USB serial stream.
 
 This library is distributed under the GNU General Public License.
-##ReadMe Contents
-[TOC]
-#Overview
-##Installing
+## Overview
+### Installing
 To install the library, which has not been turned into a compiled Processing Java library, simply download or clone this git repository to where ever you keep your Processing sketches, and open the __IMU_Graph.pde__ file which is a working example.  You should see a screen similar to what is below:
-![alt text](https://github.com/jacrabb/IMUDataVis.Processing/docs/just_opened.png "Processing window after opening the IMU Visualizer")
-##Graph Types
+![alt text](https://raw.githubusercontent.com/jacrabb/IMUDataVis.Processing/master/docs/just_opened.gif "Processing window after opening the IMU Visualizer")
+### Graph Types
 There are three main graph types included.
 
 - The Bar Graph
@@ -24,7 +21,7 @@ There are three main graph types included.
 `plotGraph gyroplot = new plotGraph("gyro", alldata, 25, 500);`
 
 Specific feature of each graph type are described later in the document.
-##Setting Up
+### Setting Up
 For now, lets see the minimum code needed to get started with the library.
 
 There are three main components:
@@ -38,7 +35,7 @@ The __global datastore__ allows you to specify any number of parameters to expec
 Each graph you want to display is created as a __view object__ which is associated with a data 'type' name as defined in the __global datastore__ and is positioned in the Processing window.  There are lots of options you can set for each type of view and views can be overlayed which is useful to compare data.
 
 Data is read from the serial stream and stored in the __global datastore__ using a __serial parser__.  The parser uses the order in which types were added to the data store as the order it expects data to come in via the data stream.  The parser needs each value separated by a single delimiter character and each line to begin with a special safe-line string.  By default the delimiter is a space, and the safe-line string is “||”.  That means that we expect each line of data sent from the microcontroller to look something like: `|| 1.0 1.1 1.2 2.0 2.1 2.2`
-##Simple Walkthrough
+### Simple Walkthrough
 With that overview in mind, lets walk through an example.
 Our theoretical IMU project is capturing and outputting an acceleration which we would like to graph as an x/y line graph.
 First we need to define our __global data store__ object and a __view object__.  Place these definitions in your Processing main file inside the `setup()` function, and after any library import statements.
@@ -100,7 +97,7 @@ void draw(){
 The final core section of a Processing sketch is the `serialEvent(Serial p)` function.  Here we just need to grab the serial string and pass it off to the parser.
 `srl.parse(p.readString(), alldata);`
 Notice the parser also needs a reference to the global data store.  That should be it!
-####Working Code
+##### Working Code
 ```java
 dataWindow alldata = new dataWindow(400);
 plotGraph accelGraph = new barGraph("accel", alldata);
