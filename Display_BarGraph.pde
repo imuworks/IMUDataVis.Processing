@@ -1,3 +1,10 @@
+/**
+ * IMU Data Visualizer for Processing.org
+ *     Copyright (C) 2017 James (Aaron) Crabb
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 // TODO: would like to be able to display horizontal bars
 // Very seriously considering making two subclasses, Mag and Components
 //  but it does not seem to improve readability and does nothing 

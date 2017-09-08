@@ -23,7 +23,7 @@ import java.awt.Toolkit;
 //import processing.opengl.*;
 
 // Your serial port state passed to the SerialHandlr object
-//  You may use your own serial handler and call the static parse()
+//  You may use your own serial handler and call the static parsesc()
 SerialHndlr srl = new SerialHndlr(this, Serial.list()[0], 115200);
 
 // Global data store
@@ -50,6 +50,7 @@ void setup()
 
   // Set any parameters for the serial parse() function
   srl.setDelimChar('\t');
+  srl.setSafeLineSequence("//");
 
   // Initialize global data store
   //  The size defined here determains how many points are stored
@@ -62,24 +63,26 @@ void setup()
   //  you must addType("accel, orientation")
   // NOTICE, data in the serial string must come in consecutive triples
   //  @see SerialHndlr for more detail
-  alldata.addType("orientation, complimentary");
-  alldata.addType("gyroorient, gyro, accelnograv, accel");  // TODO: multiple ignore doesn't work!
+  alldata.addType("accel, gyro");
+  alldata.addType("orientation, filteredaccel, accelnogravworld, filteredgyro, gyroworld");  // TODO: multiple ignore doesn't work!
 
   // Initialize all view objects there
   //  Pass the data type (from the definitions above) they should track
   //  Also set thier x,y position
-  accelBars = new barGraph("accel", alldata, 50, 100);     // red graph - all defaults
-  rpyBars = new barGraph("gyroorient", alldata, 200, 100);  // green graph
-  rpyFileredBars = new barGraph("complimentary", alldata, 200, 100);  // green graph overlay
+  accelBars = new barGraph("accel", alldata, 50, 200);     // red graph - all defaults
+  rpyBars = new barGraph("orientation", alldata, 200, 200);  // green graph
+  rpyFileredBars = new barGraph("complimentary", alldata, 200, 200);  // green graph overlay
 
   // CAUTION, positioning a 3D vector view 
   //  at anything other than the center of the screen
   //  can result in distortion because of camera perspective
-  //  If you do, also set the Z scale low
+  //  If you do, maybe also set the Z scale low to flatten the vector's depth ? TODO test that
   vectorLines = new vectorCloud("accel", alldata, width/2, height/2);
-  vectorNoGLines = new vectorCloud("accelnograv", alldata, width/2, 20+height/2);
+  vectorNoGLines = new vectorCloud("accelnogravworld", alldata, width/2, 20+height/2);
 
-  accelGraph = new plotGraph("accel", alldata, 25, 500);
+  accelGraph = new plotGraph("accelnogravworld", alldata, 25, 525);
+  accelGraph.setScaleFactor(-0.01250F);
+  accelGraph.setThreshold(100);
 
   rpyBars.setColor(64, 128, 64);
   rpyBars.setLimitMarkColor(255, 255, 0);
@@ -119,7 +122,7 @@ void draw()
   //  Views never change fill(), so its safe
   background(0);
 
-  // This shifts display such that (0, 0) is centered in the window.
+  // This shifts the window such that (0, 0) is centered.
   //  You are welcome to do this and place views accordingly. 
 //translate(width/2, height/2);
 
@@ -150,7 +153,7 @@ void draw()
 }
 
 /** 
- * Processing built in serial event 
+ * Processing built-in serial event 
  */
 void serialEvent(Serial p)
 {
@@ -160,5 +163,5 @@ void serialEvent(Serial p)
 //System.out.print(incoming);
 
   srl.parse(incoming, alldata);
-//SerialHndlr.parse(incoming);
+//SerialHndlr.parse(incoming, alldata);
 }

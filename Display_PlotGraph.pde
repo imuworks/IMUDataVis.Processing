@@ -1,4 +1,11 @@
 /**
+ * IMU Data Visualizer for Processing.org
+ *     Copyright (C) 2017 James (Aaron) Crabb
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
  * View to display data as a plotted line graph.
  * The graph may be either of the vector's magnitude,
  * or of any single component of the vector.
@@ -169,9 +176,9 @@ public class plotGraph extends view {
     line(xPos, yPos, xPos+graph_l, yPos);
     
     if(textLabel) 
-      text(dataName,  xPos-textSize,  yPos-height);
+      text(dataName,  xPos-textSize,  yPos-(threshold));
     stroke(0, 255, 255); // y axis
-    line(xPos, yPos, xPos, yPos-height);
+    line(xPos, yPos, xPos, yPos-(threshold));
   
   
     int position = this.data.getPointer(dataName);
@@ -196,7 +203,7 @@ public class plotGraph extends view {
       }
       
       if(fitToHeight)
-        PointPos = map(PointPos, -G*scaleFactor, G*scaleFactor, yPos, yPos+height);
+        PointPos = map(PointPos, -G*scaleFactor, G*scaleFactor, yPos, yPos+(threshold));
       else
         PointPos = (PointPos * scaleFactor);
               
@@ -218,7 +225,7 @@ public class plotGraph extends view {
       stroke(192, 192, 0); // x axis
       line(xPosInset, yPosInset, xPosInset+(insetDotPitch*insetWindowSize), yPosInset); // TODO: explain/doc windowSize * 2
       stroke(0, 192, 192); // y axis
-      line(xPosInset, yPosInset, xPosInset, yPosInset-height);
+      line(xPosInset, yPosInset, xPosInset, yPosInset-(threshold));
     
 
       //now real madness

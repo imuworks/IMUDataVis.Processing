@@ -1,3 +1,13 @@
+/**
+ * IMU Data Visualizer for Processing.org
+ *     Copyright (C) 2017 James (Aaron) Crabb
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *  For full documentation please visit 
+ *  https://github.com/jacrabb/IMUDataVis.Processing
+ */
+ 
 //import java.util.Iterator;
 import java.util.Arrays;
 import java.util.LinkedHashMap;

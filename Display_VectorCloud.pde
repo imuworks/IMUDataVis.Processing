@@ -1,4 +1,14 @@
 /**
+ * IMU Data Visualizer for Processing.org
+ *     Copyright (C) 2017 James (Aaron) Crabb
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *  For full documentation please visit 
+ *  https://github.com/jacrabb/IMUDataVis.Processing
+ */
+
+/**
  * Visualizes data as a 3D vector.
  * This vector is rendered 'simply' as a
  * line in 3D space from the origin you specific
@@ -14,6 +24,9 @@
  * the cloud in the camera's z axis.  Additionally there is a z offset
  * to move the cloud closer to the camera, which I found usefull.
  * I also found negative z values to be buggy.
+ *
+ * Please view the documentation at
+ * https://github.com/jacrabb/IMUDataVis.Processing
  */
 public class vectorCloud extends view {
   /**

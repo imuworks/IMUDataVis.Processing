@@ -125,3 +125,22 @@ void serialEvent(Serial p)
 ```
 
 From here, if you start your microcontroller plugged into your computer's USB and hit the run button in Processing you should see a graph of your data (assuming your microcontroller is outputting data at the correct baudrate and with the correct string formatting)!
+
+## Advanced Features
+### data store
+### graph types
+#### plot graph
+#### bar graph
+#### vector cloud
+### serial parse
+
+
+## Class Reference
+This section contains a complete reference for all classes defined in the library.
+Class:
+Contained in:
+Properties:
+Methods:
+
+
+
