@@ -96,6 +96,8 @@ public class dataWindow {
         String trimType = trim(s);
         if(!doesTypeExist(trimType))
           DataPoints.put(trimType, new imuData(Length));
+        //else // TODO: turn duplicates into random names (prevents the entry being skipped)
+        //  DataPoints.put(trimType+(char)(Math.random()*10), new imuData(Length));
         //if(trimType != "ignore" && trimType != "null")  // these keys act as placeholders
         addPoint(trimType, new AVector(0, 0, 0)); // init to zero for simplicity (no reason not to)
       }

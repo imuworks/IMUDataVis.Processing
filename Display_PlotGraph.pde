@@ -139,7 +139,7 @@ public class plotGraph extends view {
    * 0 = x, 1 = y, 2 = z
    * As expected for an array float[3].                              */
   private void component(int i){ 
-    xyz = i;
+    min(max(xyz = i,2),0);
     useMagnitude = false;
   }
   /**

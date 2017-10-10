@@ -127,12 +127,37 @@ void serialEvent(Serial p)
 From here, if you start your microcontroller plugged into your computer's USB and hit the run button in Processing you should see a graph of your data (assuming your microcontroller is outputting data at the correct baudrate and with the correct string formatting)!
 
 ## Advanced Features
-### data store
-### graph types
-#### plot graph
-#### bar graph
-#### vector cloud
-### serial parse
+### Global Data Store (__dataWindow__ class)
+The class __dataWindow__ is where all data retrieved from the serial stream will be stored.  The class is a wrapper for a HashMap of Strings to __AVector__ arrays which are themselves wrapped by an __imuData__ internal class.
+The __AVector__ class is an extension of __PVector__ but with a precalculated magnitude to speed up rendering.  However, you will not need to worry about AVectors unless you are writing some custom feature.
+By default, __dataWindow__ will store the 400 most recent data points read via serial.  This may be changed by passing an into into the constructor. 
+```java
+dataWindow data = new dataWindow(intHowMany);
+```
+The __dataWindow__ also defines the data that you expect your IMU to output over serial.  Because the underlying data is stored as a key::value pair, we can assign a unique name to each input we recieve from the IMU.  Additionally, the order inwich data is expected from the IMU is defined by the order the types are named in the __dataWindow__.  Use the method `.addType(String type)` inside the __setup()__ function to add a datatype.  The string you provide can be delimeted with commas so you may add multiple entries at once.  If a name is provided twice, either within the same comma delimeted string, or in subseqent calls to `.addType()`, the duplicate is quietly ignored.  This must be avoided as it will shift the expected ordering of your data.  For example, if you use the string "accel, gyro, accel, orientation" the second "accel" will be ignored and the order will bcome {"accel", "gyro", "orientation"}.  NOTE: There is a planed feature to help eveviate this issue.  The method `.doesTypeExist(String type)` can be used to check if a string name has already been used.
+Whenever you create a view object, such as a __barGraph__ or __vectorCloud__, you will need to pass your __dataWindow__ object to that __view object__'s constructor along with the string that names the type of data the view should render.  This allows each view object to have a reference to the data store and the named dataset in it.
+If you want to retrieve data from the __dataWindow__ you may use the following methods:
+`.getAll(String type)` will return an array of __AVector__s which represents all the data currently stored for the named data type you requested.  Its important to note that the array is not shifted with new entries are added.  This means that the [0] position in the array is not always the oldest data.  Instead, an internal int keeps track of the current position in the array where data has most recently been added.
+`.getCurrent(String type)` will return a single __AVector__ which is the most recent data added for the named data type you requested.
+`.get(String type, int index)` will return a single __AVector__ at a suppied index within the internal array.  Use this function with caution, as the first position in the array does not always stored the olded value.  You may use `.getPointer(String type)` to find the array position where data was most recently added.
+### Graph/Display Types
+#### 2D Plot Graph (__plotGraph__ class)
+Plot graph is one of the more interesting visualization tools in this library.  This tool allows you to plot a realtime 2D XY line graph of IMU data.  An example usage would be: `plotGraph accelGraph = new plotGraph("accel", data, 100, 100);`.
+![alt text](https://github.com/jacrabb/IMUDataVis.Processing/raw/master/docs/???????????.png "IMU Data Visualizations")
+The plot graph will always display all of the data stored in the __dataWindow__ and the width of the graph is always equal to the size of the __dataWindow__.  Currently, the X axis always represents time and the Y axis will be the data you requested.  By default, the view will plot the magnitude of the requested data represented as a vector.  To select a single component value you may use the methods `.xComponent()`, `.yComponent()`, `.zComponent()` respectively.  Sometimes it is not appropriate to consider the component values to be XYZ, in that case you may use `.component(intI)` and supply an integer between 0-2 that represents the array position of the data you wish to graph.  To switch back to graphing magnitudes, use `.useMagnitude(true)`.  If `.useMagnitude(false)` is called, the last component value that was set will be graphed, or by default the X component.
+As with all display types, you can scale values before they are displayed using `.setScaleFactor(floatScaleFactor)`.  This will affect the height of the line being graphed.  By default, the scaleFactor is set to -0.25.  This means that data is inverted and a pixel on the screen represents 4 units of value.  If your IMU outputs data in gravity units and is set to +/-3g, you may wish to use a scalefactor something like 100 such that a measurement of 1g produces a line 100pixels tall and the graph will never be more than 600pixels high (300 above the X axis + 300 below).
+Often times it makes sense to plot data on the same XY graph in order to compare data.  This is easily acomplished by creating multiple __plotGraph__ objects and placing them at the same location in the Processing Window.  When doing this the order of the graphs will be determined by the order inwhich `.paint()` is called on the objects in the Processing `draw()` loop.  In the example below, each component of an accelarometer is rendered in red, green, and blue with magnitude rendered in white.
+????????????????????????????????????????????
+In the example below, a raw accelarometer reading is rendered in bright red, with a software-lowpass-filtered version rendered in dark red.
+????????????????????????????????????????????
+
+#### Bar Graph (__barGraph__ class)
+
+#### 3D Vector Cloud (__vectorCloud__ class)
+
+#### 3D Frame (__frame3D__ class)
+
+### Serial Parse
 
 
 ## Class Reference
