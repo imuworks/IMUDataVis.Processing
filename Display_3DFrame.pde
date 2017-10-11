@@ -4,7 +4,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+ 
 /**
  * View to display a 3D orientation.
  * This class renders a 3D object given an orientation from the IMU.

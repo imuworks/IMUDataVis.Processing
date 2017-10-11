@@ -23,7 +23,7 @@ import java.awt.Toolkit;
 //import processing.opengl.*;
 
 // Your serial port state passed to the SerialHandlr object
-//  You may use your own serial handler and call the static parsesc()
+//  You may use your own serial handler and call the static parse()
 SerialHndlr srl = new SerialHndlr(this, Serial.list()[0], 115200);
 
 // Global data store
