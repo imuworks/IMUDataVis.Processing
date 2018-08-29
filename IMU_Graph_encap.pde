@@ -77,6 +77,7 @@ void setup()
   //  at anything other than the center of the screen
   //  can result in distortion because of camera perspective
   //  If you do, maybe also set the Z scale low to flatten the vector's depth ? TODO test that
+  //  TODO is there an isometric camera mode?  or a way to cheat it (focal length)?
   vectorLines = new vectorCloud("accel", alldata, width/2, height/2);
   vectorNoGLines = new vectorCloud("accelnogravworld", alldata, width/2, 20+height/2);
 

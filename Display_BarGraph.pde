@@ -16,7 +16,7 @@
  * or you may display its magnitude 
  * (using the useMagnitude() method) as single bar.
  * Optionally, you may also display 'limit marks'
- * which are small ticks to show the mose extreme
+ * which are small ticks to show the most extreme
  * (positive and negative) values found.
  *
  * Please view the documentation at
@@ -119,24 +119,27 @@ public class barGraph extends view
   // TODO: Why is scalefactor negative? 
   /**
    * Helper function called by paint() to draw lines and text lables.     */
-  private void drawBar(int barHeight, int thisxPos, String text, int max, int min){
-     // this draws the line
-     line(thisxPos,    yPos,    thisxPos,  barHeight + yPos);
+  private void drawBar(int barHeight, String text, int max, int min){
+     // this draws the line 
+    // ... translate has already happened at this point
+     line(0,    0,    0,  barHeight);
      if(limitMarks) {
        strokeWeight(limitMarkHeight); stroke(limitMarkColor);
-       int t = lineWidth/2;//limitMarkWidth/2;
+
+       int t = lineWidth/2; //limitMarkWidth/2;
+
        // TODO: Work on the reversing issue (notice scale factor is negative)
        if(max < 0)
-         line(-t + thisxPos, max + yPos, t + thisxPos, max + yPos);
+         line(-t, max, t, max);
        if(min > 0)
-         line(-t + thisxPos, min + yPos, t + thisxPos, min + yPos);
+         line(-t, min, t, min);
      }
      // add a label TODO: should be a way to scale the printed value
      
      if(textLabel){
-       text(dataName, xPos-barGap-lineWidth, yPos-20);
+       text(dataName, -barGap-lineWidth, -20);
        if(text != null)
-         text(text,  thisxPos - lineWidth,  barHeight + yPos+ (barHeight < 0 ? -textSize : textSize));
+         text(text,  -lineWidth,  barHeight + (barHeight < 0 ? -textSize : textSize));
      }
   }
   /**
@@ -144,13 +147,15 @@ public class barGraph extends view
   public void paint(){
     manageData();
     
-    int barHeight = 0, thisxPos = 0, max = 0, min = 0;
+    pushMatrix();
+    translate(xPos, yPos);
+
+    int barHeight = 0, max = 0, min = 0;
     String text = null;
     
     // If we are graphing a vector's magnitude
     if(magnitude){
      barHeight = (int)(this.data.getCurrent(dataName).getMag() * scaleFactor);
-     thisxPos = xPos;
      
      text = (textLabel) ? Float.toString(this.data.getCurrent(dataName).getMag()/G) : null;
      
@@ -159,17 +164,20 @@ public class barGraph extends view
        // no minimum magnitude
      }
      setBrush();
-     drawBar(barHeight, thisxPos, text, max, min);
-    } else {
+     drawBar(barHeight, text, max, min);
+    } else { // if we are graphing x,y,z
       float[] values = new float[3];
        this.data.getCurrent(dataName).get(values);
      for(int i = 0; i < 3; i++) {
-       if(values == null)
+       if(values == null || values[i] == null)
          return;
        // the height of the bar is the current data point's value scaled by the scale-factor 
        barHeight = (int)(values[i] * scaleFactor);
-       // the x position is the requested x pos + the # (i) of gaps + # of bars over this bar is 
-       thisxPos = ((barGap + lineWidth) * i) + xPos;
+       // this translation happens each time through the loop, so
+       // the x position becomes x pos + the # of gaps + # of bars
+       pushMatrix();
+       translate(barGap + lineWidth, 0); 
+       //thisxPos = ((barGap + lineWidth) * i) + xPos;
 
        // add a label TODO: should be a way to scale the printed value (such as /9.8)
        text = textLabel ? Float.toString(values[i]/G) : null;
@@ -180,14 +188,12 @@ public class barGraph extends view
 //         System.out.println("Maxes["+i+"]="+max+" \t"+(maxVals.get(new float[3])[i]));
        }
        setBrush();
-       drawBar(barHeight, thisxPos, text, max, min);
+       drawBar(barHeight, text, max, min);
      }
     }
     /**/
   }
   
-  // I don't like anything about this method...
-  //  but is it worse than lots of .getCurrent() calls?
   /**
    * Takes care of all the internal data that this view has.
    * In this case, that is tracking the limit marks (if enabled).     */
