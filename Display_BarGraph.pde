@@ -189,9 +189,10 @@ public class barGraph extends view
        }
        setBrush();
        drawBar(barHeight, text, max, min);
+       popMatrix();
      }
     }
-    /**/
+    popMatrix();
   }
   
   /**
